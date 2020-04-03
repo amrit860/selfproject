@@ -12,7 +12,7 @@ const defaultForm = {
     expiryDate: '',
     image: '',
     discountedItem: false,
-    discountTpye: '',
+    discountType: '',
     discount: '',
     warrantyItem: false,
     warrantyPeriod: '',
@@ -37,7 +37,22 @@ export default class AddProductForm extends Component {
         }
         if(this.props.productData){
             this.setState({
-                data:this.props.productData
+                data:{
+                    ...defaultForm,
+                    ...this.props.productData[0],
+                    discountedItem:this.props.productData.discount
+                    && this.props.productData.discount.discountedItem
+                    ?true
+                    :false,
+                    discountTpye:this.props.productData.discount
+                    && this.props.productData.discount.discountType
+                    ?this.props.productData.discount.discountType
+                    :"",
+                    discount:this.props.productData.discount
+                    && this.props.productData.discount.discount
+                    ?this.props.productData.discount.discount
+                    :""
+                }
 
             })
         }
