@@ -7,7 +7,7 @@ import  {Loader}  from '../../common/loader/loader.component';
 export default class EditProductComponents extends Component {
     constructor(){
         super();
-        this.State={
+        this.state={
             isLoading:false,
             product:''
         };
@@ -19,7 +19,7 @@ export default class EditProductComponents extends Component {
     })
     axios.get
     (`http://localhost:2020/api/product/${this.productId}`,
-    this.state.data,{
+{
         headers:{
         "content-Type":"application/json",
         'Authorization':localStorage.getItem('token')
@@ -38,12 +38,13 @@ export default class EditProductComponents extends Component {
 
   })
   .catch(err => {
+      console.log("edit error>>",err);
       console.log("error >>",err);
 
   })
   .finally(()=>{
     this.setState({
-        isLoading:true
+        isLoading:false
     })
   })
 
@@ -55,10 +56,13 @@ export default class EditProductComponents extends Component {
     render() {
         let content=this.state.isLoading
         ?<Loader></Loader>
-        : <AddProductForm></AddProductForm>
+        : <AddProductForm title="Edit Product" productData={this.state.product}></AddProductForm>
+        
         return (
             <>
          {content}
+       
+         
          </>
         )
     }

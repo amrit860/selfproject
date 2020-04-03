@@ -11,15 +11,16 @@ const defaultForm = {
     manuDate: '',
     expiryDate: '',
     image: '',
-    discountedItem: '',
+    discountedItem: false,
     discountTpye: '',
     discount: '',
-    warrantyItem: '',
+    warrantyItem: false,
     warrantyPeriod: '',
     
 }
 
 export default class AddProductForm extends Component {
+    title="Add Product";
     constructor() {
         super();
         this.state = {
@@ -29,6 +30,19 @@ export default class AddProductForm extends Component {
             isValidForm: false
         }
     }
+    componentDidMount(){
+        console.log("props in add product>>",this.props);
+        if(this.props.title){
+            this.title=this.props.title
+        }
+        if(this.props.productData){
+            this.setState({
+                data:this.props.productData
+
+            })
+        }
+    }
+ 
     handleChange = e => {
         let { name, value, type, checked } = e.target;
         if (type === "checkbox") {
@@ -134,7 +148,7 @@ export default class AddProductForm extends Component {
             : <button disabled={!this.state.isValidForm} type="submit" className="btn btn-primary">submit</button>
         return (
             <>
-                <h2>Add Product </h2>
+                <h2>{this.title} </h2>
                 <form className="form-group" onSubmit={this.handleSubmit}>
 
                     <label>Name</label>

@@ -104,7 +104,7 @@ this.props.history.push(`/Edit Product/${id}`);
                 <th>Name</th>
                 <th>Category</th>
                 <th>Price</th>
-                <th>Created At</th>
+                <th>Created Date</th>
                 <th>Created Time</th>
 
                 <th>action</th>
