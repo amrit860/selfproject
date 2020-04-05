@@ -99,7 +99,7 @@ export  class RegisterComponent extends Component {
         //     });
         // },2000)
             axios.post
-            ("http://localhost:2020/api/auth/register",        
+            ("http://localhost:2021/api/auth/register",        
               this.state.data,{
                 headers:{
                     "Content-Type":"application/json",

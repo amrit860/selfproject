@@ -16,48 +16,62 @@ const defaultForm = {
     discount: '',
     warrantyItem: false,
     warrantyPeriod: '',
-    
+    price: '',
+
 }
 
 export default class AddProductForm extends Component {
-    title="Add Product";
+    title = "Add Product";
     constructor() {
         super();
         this.state = {
-            data: {...defaultForm},
-            err: {...defaultForm},
+            data: { ...defaultForm },
+            err: { ...defaultForm },
             isSubmitting: false,
             isValidForm: false
         }
     }
-    componentDidMount(){
-        console.log("props in add product>>",this.props);
-        if(this.props.title){
-            this.title=this.props.title
+    componentDidMount() {
+        if (this.props.title) {
+            this.title = this.props.title
         }
-        if(this.props.productData){
+        if (this.props.productData) {
             this.setState({
-                data:{
+                data: {
                     ...defaultForm,
-                    ...this.props.productData[0],
-                    discountedItem:this.props.productData.discount
-                    && this.props.productData.discount.discountedItem
-                    ?true
-                    :false,
-                    discountTpye:this.props.productData.discount
-                    && this.props.productData.discount.discountType
-                    ?this.props.productData.discount.discountType
-                    :"",
-                    discount:this.props.productData.discount
-                    && this.props.productData.discount.discount
-                    ?this.props.productData.discount.discount
-                    :""
+                    ...this.props.productData
                 }
-
             })
         }
     }
- 
+    // componentDidMount(){
+    //     console.log("props in add product>>",this.props);
+    //     if(this.props.title){
+    //         this.title=this.props.title
+    //     }
+    //     if(this.props.productData){
+    //         this.setState({
+    //             data:{
+    //                 ...defaultForm,
+    //                 ...this.props.productData[0],
+    //                 discountedItem:this.props.productData.discount
+    //                 && this.props.productData.discount.discountedItem
+    //                 ?true
+    //                 :false,
+    //                 discountTpye:this.props.productData.discount
+    //                 && this.props.productData.discount.discountType
+    //                 ?this.props.productData.discount.discountType
+    //                 :"",
+    //                 discount:this.props.productData.discount
+    //                 && this.props.productData.discount.discount
+    //                 ?this.props.productData.discount.discount
+    //                 :""
+    //             }
+
+    //         })
+    //     }
+    // }
+
     handleChange = e => {
         let { name, value, type, checked } = e.target;
         if (type === "checkbox") {
@@ -68,83 +82,131 @@ export default class AddProductForm extends Component {
                 ...pre.data,
                 [name]: value
             }
-        }),()=>{
+        }), () => {
             this.validateForm(name);
         })
     }
-    validateForm(fieldName){
+    validateForm(fieldName) {
         let errMsg;
-        switch(fieldName){
+        switch (fieldName) {
             case "category":
-                errMsg=this.state.data[fieldName]
-                ?""
-                :"category is required"
+                errMsg = this.state.data[fieldName]
+                    ? ""
+                    : "category is required"
                 break;
-                default:
-                    break;
+            default:
+                break;
         }
-        this.setState((pre)=>({
-           error:{
-               ...pre.error,
-               [fieldName]:errMsg
-           }     
-        }),()=>{
+        this.setState((pre) => ({
+            error: {
+                ...pre.error,
+                [fieldName]: errMsg
+            }
+        }), () => {
             this.checkFormValidity();
         })
-         
-    } 
-    checkFormValidity(){
-        const{error}=this.state;
-        let errors=Object
-        .values(error)
-        .filter(err=>err);
+
+    }
+    checkFormValidity() {
+        const { error } = this.state;
+        let errors = Object
+            .values(error)
+            .filter(err => err);
         this.setState({
-            isValidForm:errors.length ===0,
+            isValidForm: errors.length === 0,
         })
     }
-    handleSubmit=e=>{
+    handleSubmit = (e) => {
         e.preventDefault();
         this.setState({
-            isSubmitting:true
-        });
-        axios.post
-        ("http://localhost:2020/api/product",
-        this.state.data,{
-            headers:{
-            "content-Type":"application/json",
-            'Authorization':localStorage.getItem('token')
-             
-        },
-        params:{},
-        responseType:"json"
+            isSubmitting: true
+        })
+        if (this.state.data._id) {
+            this.update();
+        }
+        else {
+            this.add();
+        }
+        // axios.post
+        //     ("http://localhost:/api/product",
+        //         this.state.data, {
+        //         headers: {
+        //             "content-Type": "application/json",
+        //             'Authorization': localStorage.getItem('token')
+        //         },
+        //         params: {},
+        //         responseType: "json"
+        //     }
+        //     )
+        //     .then(response => {
+        //         console.log("success in axios call>>", response);
+        //         this.props.history.push("/View Product");
+        //     })
+        //     .catch(err => {
+        //         console.log("error in axios call>>", err.response)
+        //         this.setState({
+        //             isSubmitting: false
+        //         })
+        //     })
     }
-    )
+    
 
-  .then(response => {
-        // notify.showSuccess('welcome ${response.data.username}')
-        console.log("success in axios call>>", response);
-        // localStorage.setItem("token", response.data.token);
-        // localStorage.setItem("user", JSON.stringify(response.data.product));
-        this.props.history.push("/View Product");
-      })
-      .catch(err => {
-        console.log("error in axios call>>", err.response)
-        this.setState({
-            isSubmitting: false
-      })
-    //   .finally(() => {
-    //     this.setState({
-    //       isSubmitting: false
-    //     })
-      })
-    }
+
+    add() {
+        axios.post
+            ("http://localhost:2021/api/product",
+                this.state.data, {
+                headers: {
+                    "content-Type": "application/json",
+                    'Authorization': localStorage.getItem('token')
+                },
+                params: {},
+                responseType: "json"
+            }
+            )
+            .then(response => {
+                console.log("success in axios call>>", response);
+                this.props.history.push("/View Product");
+            })
+            .catch(err => {
+                console.log("error in axios call>>", err.response)
+                this.setState({
+                    isSubmitting: false
+                })
+            })
+    };
+    update() {
+        axios.put
+            (`http://localhost:2021/api/product/${this.state.data._id}`,
+                this.state.data, {
+                headers: {
+                    "content-Type": "application/json",
+                    'Authorization': localStorage.getItem('token')
+                },
+                params: {},
+                responseType: "json"
+            }
+            )
+            .then(response => {
+                console.log("success in axios call>>", response);
+                this.props.history.push("/View Product");
+            })
+            .catch(err => {
+                console.log("error in axios call>>", err.response)
+                this.setState({
+                    isSubmitting: false
+                })
+
+            })
+
+    };
 
     render() {
         let discountContent = this.state.data.discountedItem
             ?
             <>
                 <label>Discount Type</label>
-                <input className="form-control" type="text" value={this.state.data.discountTpye} placeholder="DiscountType" name="discountType" onChange={this.handleChange}></input>
+                <input className="form-control" type="text" value={this.state.data.discountType} placeholder="DiscountType" name="discountType" onChange={this.handleChange}></input>
                 <label>Discount</label>
                 <input className="form-control" type="text" value={this.state.data.discount} placeholder="Discount" name="discount" onChange={this.handleChange}></input>
             </>
@@ -154,7 +216,7 @@ export default class AddProductForm extends Component {
             ?
             <>
                 <label>warrantyPeriod</label>
-                <input className="form-control" type="text" placeholder="WarrantyPeriod" name="warrantyPeriod" onChange={this.handleChange}></input>
+                <input className="form-control" type="text" value={this.state.data.warrantyPeriod} placeholder="WarrantyPeriod" name="warrantyPeriod" onChange={this.handleChange}></input>
             </>
             : "";
 

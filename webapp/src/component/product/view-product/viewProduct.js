@@ -16,7 +16,7 @@ export default class viewProductComponent extends Component {
        this.setState({
         isLoading:true
        })
-        axios.get("http://localhost:2020/api/product", {
+        axios.get("http://localhost:2021/api/product", {
             headers: {
                 "content-Type": "application/json",
                 "authorization": localStorage.getItem("token")
@@ -46,7 +46,7 @@ this.props.history.push(`/Edit Product/${id}`);
         // eslint-disable-next-line no-restricted-globals
         let confirmation = confirm("Are you sure want to delete?")
         if (confirmation) {
-            axios.delete(`http://localhost:2020/api/product/${id}`, {
+            axios.delete(`http://localhost:2021/api/product/${id}`, {
                 headers: {
                     "content-Type": "application/json",
                     "authorization": localStorage.getItem("token")
