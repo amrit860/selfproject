@@ -7,7 +7,6 @@ const logout  = ()=>{
    
 }
 export const Header = function (props) {
-    console.log('props >>>', props);
     let navBar = props.isLoggedIn
         ?
          <ul className="nav_bar">

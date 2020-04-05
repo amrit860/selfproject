@@ -16,6 +16,7 @@ const defaultForm = {
     discount: '',
     warrantyItem: false,
     warrantyPeriod: '',
+    price:''
     
 }
 
@@ -31,7 +32,6 @@ export default class AddProductForm extends Component {
         }
     }
     componentDidMount(){
-        console.log("props in add product>>",this.props);
         if(this.props.title){
             this.title=this.props.title
         }
@@ -39,19 +39,7 @@ export default class AddProductForm extends Component {
             this.setState({
                 data:{
                     ...defaultForm,
-                    ...this.props.productData[0],
-                    discountedItem:this.props.productData.discount
-                    && this.props.productData.discount.discountedItem
-                    ?true
-                    :false,
-                    discountTpye:this.props.productData.discount
-                    && this.props.productData.discount.discountType
-                    ?this.props.productData.discount.discountType
-                    :"",
-                    discount:this.props.productData.discount
-                    && this.props.productData.discount.discount
-                    ?this.props.productData.discount.discount
-                    :""
+                    ...this.props.productData
                 }
 
             })
@@ -140,11 +128,12 @@ export default class AddProductForm extends Component {
     }
 
     render() {
+       
         let discountContent = this.state.data.discountedItem
             ?
             <>
                 <label>Discount Type</label>
-                <input className="form-control" type="text" value={this.state.data.discountTpye} placeholder="DiscountType" name="discountType" onChange={this.handleChange}></input>
+                <input className="form-control" type="text" value={this.state.data.discountType} placeholder="DiscountType" name="discountType" onChange={this.handleChange}></input>
                 <label>Discount</label>
                 <input className="form-control" type="text" value={this.state.data.discount} placeholder="Discount" name="discount" onChange={this.handleChange}></input>
             </>
@@ -154,7 +143,7 @@ export default class AddProductForm extends Component {
             ?
             <>
                 <label>warrantyPeriod</label>
-                <input className="form-control" type="text" placeholder="WarrantyPeriod" name="warrantyPeriod" onChange={this.handleChange}></input>
+                <input className="form-control" type="text" placeholder="WarrantyPeriod" name="warrantyPeriod" value={this.state.data.warrantyPeriod} onChange={this.handleChange}></input>
             </>
             : "";
 

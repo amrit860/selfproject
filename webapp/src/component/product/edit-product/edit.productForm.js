@@ -31,9 +31,19 @@ export default class EditProductComponents extends Component {
 )
 
 .then(response => {
-    console.log("editproduct>>",response);
+    const data = response.data[0]
+    if (typeof data.discount === 'object') {
+        data.discountType = data.discount.discountType?data.discount.discountType:'';
+        data.discountedItem = data.discount.discountedItem;
+        data.discount = data.discount.discount?data.discount.discount:'';
+    }
+    if (typeof data.warranty === 'object') {
+        data.warrantyItem = data.warranty.warrantyItem;
+        data.warrantyPeriod = data.warranty.warrantyPeriod;
+        data.warranty=undefined;
+    }
     this.setState({
-        product:response.data
+        product: data
     })
 
   })
